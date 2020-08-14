@@ -1,0 +1,132 @@
+<html>
+<!--10分钟-->
+<head>
+    <meta charset="utf-8">
+    <title>第四十五组Spongebob</title>
+
+    <style>
+        body {
+            background-color: pink;
+        }
+        #canvas {
+            background-color: white;
+            margin:100px;
+        }
+         #getup{
+            position: absolute;
+            left:100;
+            top:80;
+             /*不显示视频*/
+            display:none;
+        }
+        #arrow1 {
+            position: absolute;
+            /*位置*/
+            left: 120px;
+            top: 360px;
+        }
+        #arrow2 {
+            position: absolute;
+            /*位置*/
+            left: 180px;
+            top: 360px;
+        }
+        #alternative{
+            position:absolute;
+            left:300px;
+            top:290px;
+            display:none;
+        }
+        #looking{
+            position:absolute;
+            left:300px;
+            top:200px;
+            display:none;
+        }
+         /*河豚*/
+        #pufferv{
+            position: absolute;
+            left:50;
+            top:40;
+             /*不显示视频*/
+            display:none;
+        }
+        /*抹香鲸*/
+        #whalev{
+            position: absolute;
+            left:50;
+            top:40;
+             /*不显示视频*/
+            display:none;
+        }
+        /*章鱼*/
+        #octopusv{
+            position: absolute;
+            left:50;
+            top:40;
+             /*不显示视频*/
+            display:none;
+        }
+        /*绿藻*/
+        #greenv{
+            position: absolute;
+            left:50;
+            top:40;
+             /*不显示视频*/
+            display:none;
+        }
+        /*海龟*/
+        #turtlea{
+            position: absolute;
+            left:50;
+            top:40;
+            display:none;
+        }
+        /*红扇珊瑚*/
+        #corala{
+            position: absolute;
+            left:50;
+            top:40;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!--添加前进、后退箭头-->
+    <div id='arrow1'>
+        <input type="image" src="L箭头.png" id='back' width="50" height="50"  />
+    </div>
+    
+    <div id='arrow2'>
+     <input type="image" src="R箭头.png" id='go' width="50" height="50" />
+    </div>
+    <!--二选一，上班还是玩游戏-->
+    <div id='alternative'>
+        <input type="button" id='game'value="玩游戏" />
+        <input type="button" id='work'value="去上班" />
+    </div>
+    <div id='looking'>
+        <input type="button" id='look'value="打开了解" />
+    </div>
+    
+    <canvas id='canvas' width='500' height='300'>
+    </canvas>
+    
+    <video id='getup' src='getup.mp4' controls width="500" height="300"  muted>
+    </video>
+    <!--显示游戏链接-->
+    <a href="Garbage.html" target="blank">游戏</a>
+    <!-- 视频介绍-->
+    <video id='pufferv' src="河豚.mp4" controls width="500" height="300"></video>
+    <video id='whalev' src="抹香鲸.mp4" controls width="500" height="300"></video>
+    <video id='octopusv' src="章鱼.mp4" controls width="500" height="300"></video>
+    <video id='greenv' src="绿藻.mp4" controls width="500" height="300"></video>
+    <!-- 音频介绍-->
+    <audio id='turtlea' src="海龟.mp3" controls width="500" height="300"></audio>
+    <audio id='corala' src="红扇珊瑚.mp3" controls width="500" height="300"></audio>
+
+    <script src = 'daily.js'></script>
+</body>
+
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>捡垃圾</title>
+	<style>
+		body {
+			background: lightgray;
+		}
+		#canvas {
+			background: white;
+            background-image: url(back.jpg);            
+            cursor: url('mouse.png'),auto;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="300" height="600"></canvas>
+    <br>
+    <!--使START按钮换行-->
+	<button id="btn">START</button>
+	<output id="mark">Mark:0</output>
+    Time:<output id="time">30</output>
+    <!--在界面上显示当前分数和倒计时-->
+    
+	<script>
+		var canvas = document.getElementById('canvas'),
+			context = canvas.getContext('2d'),
+			btn = document.getElementById('btn'),
+            plasticBag = new Image();
+            plasticBag.src = "retrash.png";
+        var bottle = new Image();
+            bottle.src = "bottleTrash.png";
+        var foam = new Image();
+            foam.src = "foam.png";
+//      塑料袋、瓶子、泡沫等海洋垃圾图像的定义
+        var imgs = [plasticBag, bottle, foam],
+            markOut = document.getElementById('mark'),
+            timeOut = document.getElementById('time');
+        
+        var isStarted = false;                  
+//      避免多次绘图，设置一个标志值判断动画是否开始
+        
+
+		function Trash(x, y, w, h) {
+//      构造垃圾对象
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.speed = Math.round(Math.random() * 2) + 1;				
+//          速度为[1, 3)的随机整数
+            this.pattern = context.createPattern
+                (imgs[Math.round(Math.random() * 2)], 'no-repeat');         
+//          设置属性pattern
+		}
+        
+		Trash.prototype.draw = function() {				
+//          垃圾的绘制方法
+			context.beginPath();
+            context.save();
+            context.translate(this.x, this.y);
+            context.fillStyle = this.pattern;               
+//          设置context的图案填充为当前对象的图案填充
+    		context.rect(0, 0, this.w, this.h);
+    		context.fill();
+            context.closePath();
+            context.restore();
+		}
+        
+		Trash.prototype.move = function() {				
+//      垃圾的移动方式
+			if (this.y > canvas.height) return ;
+			this.y += this.speed;
+		}
+
+		//变量定义
+		var trashs = [];				
+//      所有的垃圾
+		var timer;				
+//      开始的时间
+		var generateTrashInterval,				
+//      循环生成垃圾
+			animateInterval;					
+//      循环绘制和移动垃圾
+		var mark = 0;					
+//      分数
+
+		function windowToCanvas(x, y) {				
+//      获取鼠标在canvas中的位置
+    		var mystyle = window.getComputedStyle(canvas);
+    		var bbox = canvas.getBoundingClientRect();
+    		x -= bbox.left;
+    		y -= bbox.top;
+    		x -= parseFloat(mystyle.borderLeftWidth);
+    		y -= parseFloat(mystyle.borderTopWidth);
+    		x -= parseFloat(mystyle.paddingLeft);
+    		y -= parseFloat(mystyle.paddingTop);
+    		x *= canvas.width / (parseFloat(mystyle['width']));
+    		y *= canvas.height / (parseFloat(mystyle['height']));
+    		return {
+        		x: x,
+        		y: y
+    		};
+		}
+
+		//常量定义
+		let trash_w = 51,				
+//          垃圾的宽度
+			trash_h = 51,				
+//          垃圾的高度
+			generate_duration = 500,				
+//          垃圾生成的快慢（越大越慢）
+			animate_duration = 10,				
+//          垃圾移动的快慢（越大越慢）
+			total_time = 30000;				
+//          总共的游戏时间
+            
+
+		function generateTrash() {                
+//      生成垃圾
+			var tempTrash = new Trash(Math.random() * (canvas.width - trash_w),
+                0, trash_w, trash_h);
+//          避免生成的垃圾超出canvas边界
+			trashs.push(tempTrash);
+		}
+        
+		function animate() {				
+//      关键动画
+			var now = new Date;
+			if (now - timer >= total_time) {
+				clearInterval(generateTrashInterval);
+				clearInterval(animateInterval);
+                clearInterval(TimeInterval);
+				alert("Your mark is " + mark);
+			}
+			else {
+				context.clearRect(0, 0, canvas.width, canvas.height);
+				for (i = 0; i < trashs.length; i++) {
+					trashs[i].draw();
+					trashs[i].move();
+				}
+			}
+		}
+        
+        function timeOutput(){
+            timeOut.value = parseInt(timeOut.value) - 1;
+        }
+        
+		document.onclick = function(e) {              
+//      鼠标单击事件，判断是否点击到了垃圾
+			loc = windowToCanvas(e.clientX, e.clientY);
+			for (i = 0; i < trashs.length; i++) {
+				if (loc.x >= trashs[i].x && loc.x <= trashs[i].x + trashs[i].w &&
+					loc.y >= trashs[i].y && loc.y <= trashs[i].y + trashs[i].h) {
+//                  点击到了
+					trashs.splice(i, 1);
+					mark++;
+                    markOut.value = "Mark:" + mark;
+					return ;
+				}
+			}
+		}
+
+		btn.onclick = function() {
+            if(!isStarted){
+//          若之前未点击过start
+                timer = new Date;
+                Main();
+            }
+//          点击过start后标记一次，避免Main()的多次执行
+            isStarted = true;
+		}
+
+		function Main() {				
+//      主函数
+			generateTrashInterval = setInterval(generateTrash, generate_duration);
+			animateInterval = setInterval(animate, animate_duration);
+            TimeInterval = setInterval(timeOutput, 1000);              
+//          每一秒倒计时一次
+		}
+        
+	</script>
+</body>
+</html>
